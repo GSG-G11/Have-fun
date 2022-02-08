@@ -84,3 +84,21 @@ body {
   margin-bottom: 10px;
 }
 
+@media only screen and (min-width: 600px)  {
+    .books{
+        display: flex;
+        flex-wrap: wrap;
+        justify-content:space-between;
+    }
+    .books .book-card{
+        width: 48%;
+    }
+    .movies{
+        display: flex;
+        flex-wrap: wrap;
+        justify-content:space-between;
+    }
+    .movies .movie-card{
+        width: 24%;
+    }
+}
