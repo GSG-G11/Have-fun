@@ -44,7 +44,7 @@ body {
   width: 50%;
   height: 100%;
 }
-.book-img img {
+.book-img-container {
   width: 100%;
 }
 .book-desc {
@@ -56,15 +56,15 @@ body {
   justify-content: center;
   padding: 10px 0;
 }
-.book-desc p {
+.book-name .book-author {
   margin-bottom: 10px;
 }
-.book-desc a {
+.book-link-to-read {
   text-decoration: none;
   color: var(--main-color);
   font-weight: bold;
 }
-.book-desc a:hover {
+.book-link-to-read:hover {
   color: #000000;
 }
 .movies .movie-card {
