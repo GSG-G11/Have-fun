@@ -1,5 +1,3 @@
-
-
 // API-KEY MOVIE SITE =>  e4e72d82643e224bf78695be0b5602cd
 // ************ Search ************** 
 const searchWord = document.querySelector(".search-word");
@@ -10,6 +8,7 @@ const movieAverage = document.querySelector(".movie-average");
 const movieDate = document.querySelector(".movie-date");
 const movieImg = document.querySelector(".movie-img");
 const basicMovieCard = document.querySelector(".movies");
+const basicBookCard = document.querySelector(".books");
 // ******************* BOOK *****************
 const bookName = document.querySelector(".book-name");
 const bookAuthor = document.querySelector(".book-author");
@@ -24,7 +23,7 @@ const bookLink1 = document.querySelector(".book-link-to-read1");
 //      **********************    URL      ************************
 const IMGPATH = "https://image.tmdb.org/t/p/w1280";
 const movieURL = "https://api.themoviedb.org/3/search/movie?&api_key=e4e72d82643e224bf78695be0b5602cd&query=";
-
+const bookURL = "https://www.googleapis.com/books/v1/volumes?q=";
 
 
 
@@ -40,144 +39,99 @@ function sendRequest(url, cb) {
     xhr.send();
 }
 
+/* **************************** Render For Movies And Books **********************************************/
+
+
+function innerRenderForMovies(imgPath, title, voteAverage, releaseDate) {
+    basicMovieCard.innerHTML += `      
+    <div class="movie-card">
+        <img src="${imgPath}" alt="Movie Image" class="movie-img" />
+        <div class="movie-desc">
+            <p class="movie-name">${title}</p>
+            <p class="movie-average">${voteAverage}</p>
+            <p class="movie-date">${releaseDate}</p>
+        </div>
+    </div> 
+          `;
+};
 
 function renderMovie(x) {
-    const $movieCard = document.createElement("div");
-    $movieCard.className = "movie-card";
-    basicMovieCard.appendChild($movieCard);
-
-    const $movieImg = document.createElement("img");
-    $movieImg.className = "movie-img";
-    $movieCard.appendChild($movieImg);
+    const title = x.title;
+    const average = x.vote_average;
+    const release = x.release_date;
     if (x.poster_path == null) {
         const IMGPATH = "movie-poster-template.jpg";
-        $movieImg.src = IMGPATH;
+        innerRenderForMovies(IMGPATH, title, average, release);
     } else {
-        let newImg = IMGPATH + x.poster_path
-        $movieImg.src = newImg;
+        let newImg = IMGPATH + x.poster_path;
+        innerRenderForMovies(newImg, title, average, release);
     }
-
-    const $descMovie = document.createElement("p");
-    $descMovie.className = "movie-desc";
-    $movieCard.appendChild($descMovie);
-
-    const $movieName = document.createElement("p");
-    $movieName.className = "movie-name";
-    $descMovie.appendChild($movieName);
-    $movieName.textContent = x.title;
-
-    const $movieAverage = document.createElement("p");
-    $movieAverage.className = "movie-average";
-    $descMovie.appendChild($movieAverage);
-    $movieAverage.textContent = x.vote_average;
-
-    const $movieDate = document.createElement("p");
-    $movieDate.className = "movie-date";
-    $descMovie.appendChild($movieDate);
-    $movieDate.textContent = x.release_date;
 }
 
+function innerRenderForBooks(img, title, author, link) {
+    basicBookCard.innerHTML += `      
+    <div class="book-card">
+        <div class="book-img">
+            <img src="${img}" alt="book image" class="book-img-container"/>
+        </div>
+        <div class="book-desc">
+            <p class="book-name">${title}</p>
+            <p class="book-author">${author}</p>
+            <a href="${link}" class="book-link-to-read" >Click To Read</a>
+        </div>
+    </div>
+          `;
+};
 
 
-const basicBookCard = document.querySelector(".books");
 function renderBook(x) {
-    const $bookCard = document.createElement("div");
-    $bookCard.className = "book-card";
-    basicBookCard.appendChild($bookCard);
-
-    const $bookImgContainer = document.createElement("div");
-    $bookImgContainer.className = "book-img";
-    $bookCard.appendChild($bookImgContainer);
-
-    const $bookImg = document.createElement("img");
-    $bookImg.className = "book-img-container";
-    $bookImgContainer.appendChild($bookImg);
-    console.log(x.volumeInfo.imageLinks.smallThumbnail);
-    $bookImg.src = x.volumeInfo.imageLinks.smallThumbnail;
-
-    const $bookDesc = document.createElement("div");
-    $bookDesc.className = "book-desc";
-    $bookCard.appendChild($bookDesc);
-
-    const $bookName = document.createElement("p");
-    $bookName.className = "book-name";
-    $bookDesc.appendChild($bookName);
-    console.log(x.volumeInfo.title);
-    $bookName.textContent = x.volumeInfo.title;
-
-
-    const $bookAuthor = document.createElement("p");
-    $bookAuthor.className = "book-author";
-    $bookDesc.appendChild($bookAuthor);
-    console.log(x.volumeInfo.authors);
-    $bookAuthor.textContent = x.volumeInfo.authors;
-
-    const $bookLink = document.createElement("a");
-    $bookLink.className = "book-link-to-read";
-    $bookDesc.appendChild($bookLink);
-    console.log(x.volumeInfo.previewLink);
-    $bookLink.href = x.volumeInfo.previewLink;
+    const img = x.volumeInfo.imageLinks.smallThumbnail;
+    const title = x.volumeInfo.title;
+    const link = x.volumeInfo.previewLink;
+    if (x.volumeInfo.authors === undefined) {
+        const author = "";
+        innerRenderForBooks(img, title, author, link);
+    } else {
+        const author =x.volumeInfo.authors;
+        innerRenderForBooks(img, title, author, link);
+    }
 }
 
+/* *******************************    Default Screen  ********************************************************** */
+const movieURLDefault = "https://api.themoviedb.org/3/search/movie?&api_key=e4e72d82643e224bf78695be0b5602cd&query=random";
+sendRequest(movieURLDefault, (response) => {
+    console.log(response);
+    for (let i = 0; i < response.results.length; i++) {
+        renderMovie(response.results[i]);
+    }
+});
 
-
-
-
-
-//      *************** DEFAULT MOVIES *******************
-// const movieURLBasic = "https://api.themoviedb.org/3/search/movie?&api_key=e4e72d82643e224bf78695be0b5602cd&query=random";
-// sendRequest(movieURL, (response) => {
-//     let req = response.results;
-//     console.log(req);
-//     for (let i = 0; i < req.length; i++) {
-//         renderMovie(response.results[i]);
-//     }
-// })
-
-
-
-const bookURLBasic = "https://www.googleapis.com/books/v1/volumes?q=";
-// sendRequest(bookURLBasic, (response) => {
-//     console.log(response);
-//     // bookName.textContent = response.items[0].volumeInfo.title;
-//     // bookAuthor.textContent = response.items[0].volumeInfo.authors;
-//     // bookImg.src = response.items[0].volumeInfo.imageLinks.smallThumbnail;
-//     // bookLink.href = response.items[0].volumeInfo.previewLink;
-
-// })
+const bookURLDefault = "https://www.googleapis.com/books/v1/volumes?q=random";
+sendRequest(bookURLDefault, (response) => {
+    for (let i = 1; i < 3; i++) {
+        renderBook(response.items[i]);
+        console.log(response.items[i].volumeInfo.previewLink);
+    }
+})
 
 searchBtn.addEventListener("click", () => {
+    basicMovieCard.textContent = " ";
     let movieURLSearched = movieURL + searchWord.value;
     sendRequest(movieURLSearched, (response) => {
-        // console.log(response);
         let req = response.results;
-        // console.log(req);
         for (let i = 0; i < req.length; i++) {
             renderMovie(response.results[i]);
         }
     })
-    let bookURLSearched = bookURLBasic + searchWord.value;
+    basicBookCard.textContent = "";
+    let bookURLSearched = bookURL + searchWord.value;
     sendRequest(bookURLSearched, (response) => {
         console.log(response);
-
-        // for (let i = 0; i < 2; i++) {
-        //     console.log(response);
-        //     renderBook(response.items[i]);
-        //     console.log(response.items[i].volumeInfo.previewLink);
-        // }
-        // console.log(response.items[0].volumeInfo.previewLink);
-        bookName.textContent = response.items[0].volumeInfo.title;
-        bookAuthor.textContent = response.items[0].volumeInfo.authors;
-        bookImg.src = response.items[0].volumeInfo.imageLinks.smallThumbnail;
-        bookLink.href = response.items[0].volumeInfo.previewLink;
-
-        bookName1.textContent = response.items[1].volumeInfo.title;
-        bookAuthor1.textContent = response.items[1].volumeInfo.authors;
-        bookImg1.src = response.items[1].volumeInfo.imageLinks.smallThumbnail;
-        bookLink1.href = response.items[1].volumeInfo.previewLink;
-        // renderBook(response.items[0]);
-    })
+        for (let i = 0; i < 2; i++) {
+            console.log(response);
+            renderBook(response.items[i]);
+            console.log(response.items[i].volumeInfo.previewLink);
+        }
+    });
+    searchWord.value = " ";
 }) // End EventListener 
-
-
-
