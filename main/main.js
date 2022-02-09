@@ -1,5 +1,5 @@
 // API-KEY MOVIE SITE =>  e4e72d82643e224bf78695be0b5602cd
-// ************ Search ************** 
+// ************ Search **************
 const searchWord = document.querySelector(".search-word");
 const searchBtn = document.querySelector("#search");
 // ***************  MOVIE ***************
@@ -22,27 +22,38 @@ const bookImg1 = document.querySelector(".book-img-container1");
 const bookLink1 = document.querySelector(".book-link-to-read1");
 //      **********************    URL      ************************
 const IMGPATH = "https://image.tmdb.org/t/p/w1280";
-const movieURL = "https://api.themoviedb.org/3/search/movie?&api_key=e4e72d82643e224bf78695be0b5602cd&query=";
+const movieURL =
+  "https://api.themoviedb.org/3/search/movie?&api_key=e4e72d82643e224bf78695be0b5602cd&query=";
 const bookURL = "https://www.googleapis.com/books/v1/volumes?q=";
-
-
 
 // ******************* SEND REQUEST *********************
 function sendRequest(url, cb) {
-    const xhr = new XMLHttpRequest();
-    xhr.onreadystatechange = () => {
-        if (xhr.readyState === 4 && xhr.status === 200) {
-            cb(JSON.parse(xhr.responseText));
-        }
-    };
-    xhr.open('GET', url);
-    xhr.send();
+  const xhr = new XMLHttpRequest();
+  xhr.onreadystatechange = () => {
+    if (xhr.readyState === 4 && xhr.status === 200) {
+      cb(JSON.parse(xhr.responseText));
+    } else if (xhr.status === 401) {
+      basicMovieCard.textContent = "NOT FOUND TRY SOMETHING ELSE";
+      basicBookCard.textContent = "NOT FOUND TRY SOMETHING ELSE";
+    } else if (xhr.status === 404) {
+      basicMovieCard.textContent = "NOT FOUND TRY SOMETHING ELSE";
+      basicBookCard.textContent = "NOT FOUND TRY SOMETHING ELSE";
+    } else if (xhr.status === 400) {
+      basicMovieCard.textContent = "NOT FOUND TRY SOMETHING ELSE";
+      basicBookCard.textContent = "NOT FOUND TRY SOMETHING ELSE";
+    } else if (xhr.status === 500) {
+      basicMovieCard.textContent = "NOT FOUND TRY SOMETHING ELSE";
+      basicBookCard.textContent = "NOT FOUND TRY SOMETHING ELSE";
+    }
+  };
+  xhr.open("GET", url);
+  xhr.send();
 }
 
 /* **************************** Render For Movies And Books **********************************************/
 
 function innerRenderForMovies(imgPath, title, voteAverage, releaseDate) {
-    basicMovieCard.innerHTML += `      
+  basicMovieCard.innerHTML += `      
     <div class="movie-card">
         <img src="${imgPath}" alt="Movie Image" class="movie-img" />
         <div class="movie-desc">
@@ -52,23 +63,23 @@ function innerRenderForMovies(imgPath, title, voteAverage, releaseDate) {
         </div>
     </div> 
           `;
-};
+}
 
 function renderMovie(x) {
-    const title = x.title;
-    const average = x.vote_average;
-    const release = x.release_date;
-    if (x.poster_path == null) {
-        const IMGPATH = "movie-poster-template.jpg";
-        innerRenderForMovies(IMGPATH, title, average, release);
-    } else {
-        let newImg = IMGPATH + x.poster_path;
-        innerRenderForMovies(newImg, title, average, release);
-    }
+  const title = x.title;
+  const average = x.vote_average;
+  const release = x.release_date;
+  if (x.poster_path == null) {
+    const IMGPATH = "movie-poster-template.jpg";
+    innerRenderForMovies(IMGPATH, title, average, release);
+  } else {
+    let newImg = IMGPATH + x.poster_path;
+    innerRenderForMovies(newImg, title, average, release);
+  }
 }
 
 function innerRenderForBooks(img, title, author, link) {
-    basicBookCard.innerHTML += `      
+  basicBookCard.innerHTML += `      
     <div class="book-card">
         <div class="book-img">
             <img src="${img}" alt="book image" class="book-img-container"/>
@@ -80,57 +91,57 @@ function innerRenderForBooks(img, title, author, link) {
         </div>
     </div>
           `;
-};
-
+}
 
 function renderBook(x) {
-    const img = x.volumeInfo.imageLinks.smallThumbnail;
-    const title = x.volumeInfo.title;
-    const link = x.volumeInfo.previewLink;
-    if (x.volumeInfo.authors === undefined) {
-        const author = "";
-        innerRenderForBooks(img, title, author, link);
-    } else {
-        const author =x.volumeInfo.authors;
-        innerRenderForBooks(img, title, author, link);
-    }
+  const img = x.volumeInfo.imageLinks.smallThumbnail;
+  const title = x.volumeInfo.title;
+  const link = x.volumeInfo.previewLink;
+  if (x.volumeInfo.authors === undefined) {
+    const author = "";
+    innerRenderForBooks(img, title, author, link);
+  } else {
+    const author = x.volumeInfo.authors;
+    innerRenderForBooks(img, title, author, link);
+  }
 }
 
 /* *******************************    Default Screen  ********************************************************** */
-const movieURLDefault = "https://api.themoviedb.org/3/search/movie?&api_key=e4e72d82643e224bf78695be0b5602cd&query=random";
+const movieURLDefault =
+  "https://api.themoviedb.org/3/search/movie?&api_key=e4e72d82643e224bf78695be0b5602cd&query=random";
 sendRequest(movieURLDefault, (response) => {
-    console.log(response);
-    for (let i = 0; i < response.results.length; i++) {
-        renderMovie(response.results[i]);
-    }
+  console.log(response);
+  for (let i = 0; i < response.results.length; i++) {
+    renderMovie(response.results[i]);
+  }
 });
 
 const bookURLDefault = "https://www.googleapis.com/books/v1/volumes?q=random";
 sendRequest(bookURLDefault, (response) => {
-    for (let i = 1; i < 3; i++) {
-        renderBook(response.items[i]);
-        console.log(response.items[i].volumeInfo.previewLink);
-    }
-})
+  for (let i = 1; i < 4; i++) {
+    renderBook(response.items[i]);
+    console.log(response.items[i].volumeInfo.previewLink);
+  }
+});
 
 searchBtn.addEventListener("click", () => {
-    basicMovieCard.textContent = " ";
-    let movieURLSearched = movieURL + searchWord.value;
-    sendRequest(movieURLSearched, (response) => {
-        let req = response.results;
-        for (let i = 0; i < req.length; i++) {
-            renderMovie(response.results[i]);
-        }
-    })
-    basicBookCard.textContent = "";
-    let bookURLSearched = bookURL + searchWord.value;
-    sendRequest(bookURLSearched, (response) => {
-        console.log(response);
-        for (let i = 0; i < 2; i++) {
-            console.log(response);
-            renderBook(response.items[i]);
-            console.log(response.items[i].volumeInfo.previewLink);
-        }
-    });
-    searchWord.value = " ";
-}) // End EventListener 
+  basicMovieCard.textContent = " ";
+  let movieURLSearched = movieURL + searchWord.value;
+  sendRequest(movieURLSearched, (response) => {
+    let req = response.results;
+    for (let i = 0; i < req.length; i++) {
+      renderMovie(response.results[i]);
+    }
+  });
+  basicBookCard.textContent = "";
+  let bookURLSearched = bookURL + searchWord.value;
+  sendRequest(bookURLSearched, (response) => {
+    console.log(response);
+    for (let i = 0; i < 3; i++) {
+      console.log(response);
+      renderBook(response.items[i]);
+      console.log(response.items[i].volumeInfo.previewLink);
+    }
+  });
+  searchWord.value = " ";
+}); // End EventListener
