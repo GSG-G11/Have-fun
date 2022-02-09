@@ -41,7 +41,6 @@ function sendRequest(url, cb) {
 
 /* **************************** Render For Movies And Books **********************************************/
 
-
 function innerRenderForMovies(imgPath, title, voteAverage, releaseDate) {
     basicMovieCard.innerHTML += `      
     <div class="movie-card">
