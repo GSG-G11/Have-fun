@@ -16,6 +16,7 @@ Its a website you as a user can search about books and movies to **HAVE FUN** .
 - You will see the default movies and books in the page .
 - As a user you can search about any book and movie has the same name.
 - We designed the website to only show 3 books and all the movies has the same name.
+![Website Screenshot](screenshot.png)
 
 
 ## Clone It 🖨 
