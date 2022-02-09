@@ -27,7 +27,7 @@ const movieURL =
 const bookURL = "https://www.googleapis.com/books/v1/volumes?q=";
 // const quotAPI ="https://type.fit/api/quotes";
 // ******************* SEND REQUEST *********************
-function sendRequest(url, cb) {
+function sendRequest(url, cb ) {
   const xhr = new XMLHttpRequest();
   xhr.onreadystatechange = () => {
     if (xhr.readyState === 4 && xhr.status === 200) {
