@@ -25,27 +25,24 @@ const IMGPATH = "https://image.tmdb.org/t/p/w1280";
 const movieURL =
   "https://api.themoviedb.org/3/search/movie?&api_key=e4e72d82643e224bf78695be0b5602cd&query=";
 const bookURL = "https://www.googleapis.com/books/v1/volumes?q=";
-// const quotAPI ="https://type.fit/api/quotes";
+
 // ******************* SEND REQUEST *********************
-function sendRequest(url, cb ) {
+function sendRequest(url, error, cb) {
+  const errorMessage = "NOT FOUND ... TRY SOMETHING ELSE";
   const xhr = new XMLHttpRequest();
   xhr.onreadystatechange = () => {
     if (xhr.readyState === 4 && xhr.status === 200) {
       cb(JSON.parse(xhr.responseText));
-    } else if (xhr.status === 401) {
-      basicMovieCard.textContent = "NOT FOUND TRY SOMETHING ELSE";
-      basicBookCard.textContent = "NOT FOUND TRY SOMETHING ELSE";
-    } else if (xhr.status === 404) {
-      basicMovieCard.textContent = "NOT FOUND TRY SOMETHING ELSE";
-      basicBookCard.textContent = "NOT FOUND TRY SOMETHING ELSE";
     } else if (xhr.status === 400) {
-      basicMovieCard.textContent = "NOT FOUND TRY SOMETHING ELSE";
-      basicBookCard.textContent = "NOT FOUND TRY SOMETHING ELSE";
+      error.textContent = errorMessage;
+    } else if (xhr.status === 404) {
+      error.textContent = errorMessage;
+    } else if (xhr.status === 422) {
+      error.textContent = errorMessage;
     } else if (xhr.status === 500) {
-      basicMovieCard.textContent = "NOT FOUND TRY SOMETHING ELSE";
-      basicBookCard.textContent = "NOT FOUND TRY SOMETHING ELSE";
+      error.textContent = errorMessage;
     }
-  };
+  };//
   xhr.open("GET", url);
   xhr.send();
 }
@@ -109,26 +106,26 @@ function renderBook(x) {
 /* *******************************    Default Screen  ********************************************************** */
 const movieURLDefault =
   "https://api.themoviedb.org/3/search/movie?&api_key=e4e72d82643e224bf78695be0b5602cd&query=random";
-sendRequest(movieURLDefault, (response) => {
-  console.log(response);
+sendRequest(movieURLDefault, basicMovieCard, (response) => {
   for (let i = 0; i < response.results.length; i++) {
     renderMovie(response.results[i]);
   }
 });
 
 const bookURLDefault = "https://www.googleapis.com/books/v1/volumes?q=random";
-sendRequest(bookURLDefault, (response) => {
+sendRequest(bookURLDefault, basicBookCard, (response) => {
   for (let i = 1; i < 4; i++) {
     renderBook(response.items[i]);
-    console.log(response.items[i].volumeInfo.previewLink);
   }
 });
 
 /* ************************ EVENT LISTENER *************************************** */
 searchBtn.addEventListener("click", () => {
+  console.log(searchWord.value);
   basicMovieCard.textContent = " ";
   let movieURLSearched = movieURL + searchWord.value;
-  sendRequest(movieURLSearched, (response) => {
+  sendRequest(movieURLSearched, basicMovieCard, (response) => {
+    // console.log(response);
     let req = response.results;
     for (let i = 0; i < req.length; i++) {
       renderMovie(response.results[i]);
@@ -136,12 +133,9 @@ searchBtn.addEventListener("click", () => {
   });
   basicBookCard.textContent = "";
   let bookURLSearched = bookURL + searchWord.value;
-  sendRequest(bookURLSearched, (response) => {
-    console.log(response);
+  sendRequest(bookURLSearched, basicBookCard, (response) => {
     for (let i = 0; i < 3; i++) {
-      console.log(response);
       renderBook(response.items[i]);
-      console.log(response.items[i].volumeInfo.previewLink);
     }
   });
   searchWord.value = " ";
