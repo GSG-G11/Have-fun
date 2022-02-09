@@ -4,21 +4,33 @@
 }
 body {
   box-sizing: border-box;
-  padding: 50px;
+  padding: 20px 50px;
   font-family: "Poppins", sans-serif;
+  background-color: #fcfcfc;
 }
 :root {
   --main-color: #ff2e2e;
   --second-color: #f5f5f5;
   --font-color: #252424;
 }
+.header-page{
+  display: flex;
+  flex-direction: column;
+    align-items: center;
+    margin-bottom: 20px;
+}
+.header-page strong{
+  color: var(--main-color);
+}
 .search {
   display: flex;
   justify-content: center;
+ 
 }
+
 .search input {
   background-color: var(--second-color);
-  border: none;
+  border: 0.5px #a8a8a8 solid;
   border-radius: 15px;
   height: 40px;
   width: 30%;
@@ -26,6 +38,7 @@ body {
   padding-right: 15px;
   margin-bottom: 20px;
 }
+
 #search{
   width: 70px;
   height: 40px;

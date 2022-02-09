@@ -25,9 +25,9 @@ const IMGPATH = "https://image.tmdb.org/t/p/w1280";
 const movieURL =
   "https://api.themoviedb.org/3/search/movie?&api_key=e4e72d82643e224bf78695be0b5602cd&query=";
 const bookURL = "https://www.googleapis.com/books/v1/volumes?q=";
-
+// const quotAPI ="https://type.fit/api/quotes";
 // ******************* SEND REQUEST *********************
-function sendRequest(url, cb) {
+function sendRequest(url, cb ) {
   const xhr = new XMLHttpRequest();
   xhr.onreadystatechange = () => {
     if (xhr.readyState === 4 && xhr.status === 200) {
@@ -50,7 +50,7 @@ function sendRequest(url, cb) {
   xhr.send();
 }
 
-/* **************************** Render For Movies And Books **********************************************/
+/* **************************** Render For Movies And Books ************************/
 
 function innerRenderForMovies(imgPath, title, voteAverage, releaseDate) {
   basicMovieCard.innerHTML += `      
@@ -124,6 +124,7 @@ sendRequest(bookURLDefault, (response) => {
   }
 });
 
+/* ************************ EVENT LISTENER *************************************** */
 searchBtn.addEventListener("click", () => {
   basicMovieCard.textContent = " ";
   let movieURLSearched = movieURL + searchWord.value;
