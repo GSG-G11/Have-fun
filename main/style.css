@@ -21,10 +21,19 @@ body {
   border: none;
   border-radius: 15px;
   height: 40px;
-  width: 100%;
+  width: 30%;
   padding-left: 15px;
   padding-right: 15px;
   margin-bottom: 20px;
+}
+#search{
+  width: 70px;
+  height: 40px;
+  border: none;
+  border-radius: 15px;
+  background-color: var(--main-color);
+  color: #fff;
+  margin-left: 20px;
 }
 .main-font {
   color: var(--main-color);
@@ -72,13 +81,16 @@ body {
   align-items: center;
   flex-direction: column;
   width: 100%;
-  height: fit-content;
+  height:fit-content;
   background-color: var(--second-color);
   margin-bottom: 20px;
 }
 .movie-card img {
   width: 100%;
   margin-bottom: 20px;
+}
+.movie-desc{
+  text-align: center;
 }
 .movie-desc p {
   margin-bottom: 10px;
@@ -91,7 +103,21 @@ body {
         justify-content:space-between;
     }
     .books .book-card{
-        width: 48%;
+        width: 31%;
+        height: 300px;
+    }
+    .book-img-container {
+      height: 100%;
+      width: 100%;
+    }
+    .book-desc{
+      text-align: center;
+      display: flex;
+      align-items: center;
+      padding: auto 20px;
+    }
+    .book-desc p{
+      margin-top: 20px;
     }
     .movies{
         display: flex;
