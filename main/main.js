@@ -33,14 +33,8 @@ function sendRequest(url, error, cb) {
   xhr.onreadystatechange = () => {
     if (xhr.readyState === 4 && xhr.status === 200) {
       cb(JSON.parse(xhr.responseText));
-    } else if (xhr.status === 400) {
-      error.textContent = errorMessage;
-    } else if (xhr.status === 404) {
-      error.textContent = errorMessage;
-    } else if (xhr.status === 422) {
-      error.textContent = errorMessage;
-    } else if (xhr.status === 500) {
-      error.textContent = errorMessage;
+    } else if (xhr.status === 400 || xhr.status === 404 || xhr.status === 422 || xhr.status === 500) {
+      error.textContent = "400 error";
     }
   };//
   xhr.open("GET", url);
@@ -121,15 +115,19 @@ sendRequest(bookURLDefault, basicBookCard, (response) => {
 
 /* ************************ EVENT LISTENER *************************************** */
 searchBtn.addEventListener("click", () => {
-  console.log(searchWord.value);
   basicMovieCard.textContent = " ";
   let movieURLSearched = movieURL + searchWord.value;
+
   sendRequest(movieURLSearched, basicMovieCard, (response) => {
-    // console.log(response);
     let req = response.results;
-    for (let i = 0; i < req.length; i++) {
-      renderMovie(response.results[i]);
+    if(req.length == 0){
+      basicMovieCard.textContent= "NO FOUND Data ... TRY SOMETHING ELSE";
+    }else{
+      for (let i = 0; i < req.length; i++) {
+        renderMovie(response.results[i]);
+      }
     }
+
   });
   basicBookCard.textContent = "";
   let bookURLSearched = bookURL + searchWord.value;
